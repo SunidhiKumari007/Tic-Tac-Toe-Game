@@ -1,0 +1,212 @@
+/* --- 1. Global Reset & Variables --- */
+:root {
+    /* Define Color Palette */
+    --color-primary-dark: #3f2b96;     /* Main Heading/Strong Text */
+    --color-primary-light: #a8c0ff;    /* Light background/Gradient end */
+    --color-secondary-blue: #4a90e2;   /* Buttons/Scoreboard BG */
+    --color-accent-hover: #357abd;     /* Button hover */
+    --color-cell-bg: #bbdefb;          /* Cell background */
+    --color-cell-hover: #90caf9;       /* Cell hover */
+    --color-text-dark: #1e3a8a;        /* X/O marker color, input text */
+    --color-background-body: #e3f2fd;  /* Input BG / Assignment BG */
+    --color-white: #ffffff;
+    
+    /* Define Spacing */
+    --spacing-md: 20px;
+    --spacing-sm: 10px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', 'Arial', sans-serif; /* Poppins is a bit more modern/clean */
+}
+
+/* --- 2. Body and Container --- */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Use min-height for robustness */
+    background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary-dark));
+    padding: var(--spacing-md);
+}
+
+.container {
+    text-align: center;
+    background-color: var(--color-white);
+    padding: var(--spacing-md);
+    border-radius: 16px; /* Slightly larger radius */
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+    width: 100%;
+    max-width: 380px; /* Use max-width for better control */
+    border: 3px solid var(--color-secondary-blue);
+}
+
+/* --- 3. Typography and Input/Button Styling --- */
+h1 {
+    color: var(--color-primary-dark);
+    font-size: 2.5em;
+    margin-bottom: var(--spacing-md);
+    letter-spacing: 1px;
+}
+
+.name-inputs {
+    display: flex; /* Use flex to align inputs */
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.name-inputs input {
+    padding: var(--spacing-sm);
+    font-size: 1em;
+    width: calc(50% - 5px); /* Calculate width for two inputs with gap */
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: var(--color-background-body);
+    color: var(--color-text-dark);
+}
+.name-inputs input::placeholder {
+    color: #999;
+}
+
+.name-inputs input:focus {
+    border-color: var(--color-secondary-blue);
+    outline: 2px solid var(--color-secondary-blue);
+}
+
+#startGameButton, #restartGameButton { /* Targeting specific buttons */
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 1.1em;
+    background-color: var(--color-secondary-blue);
+    color: var(--color-white);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: var(--spacing-sm);
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+#startGameButton:hover, #restartGameButton:hover {
+    background-color: var(--color-accent-hover);
+    transform: translateY(-1px);
+}
+
+/* --- 4. Status and Assignment Display --- */
+.assignments, .status {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: var(--color-text-dark);
+    margin: 15px 0;
+    background-color: var(--color-background-body);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--color-secondary-blue);
+}
+
+/* --- 5. Game Board Styling --- */
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Use 1fr for flexible width */
+    grid-auto-rows: 1fr; /* Ensures cells are square */
+    aspect-ratio: 1 / 1; /* Keeps the grid perfectly square */
+    gap: 8px; /* Slightly larger gap */
+    margin: 20px auto;
+    width: 90%; /* Use percentage for responsiveness */
+    max-width: 300px; /* Cap the max size of the board */
+}
+
+.cell {
+    /* Removed fixed width/height for responsiveness */
+    background-color: var(--color-cell-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em; /* Slightly larger text */
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s, transform 0.1s, color 0.3s;
+}
+
+.cell:hover {
+    background-color: var(--color-cell-hover);
+    transform: scale(0.98); /* Subtle pressing effect */
+}
+
+/* Specific styling for X and O for visual distinction */
+.cell:not(:empty) {
+    cursor: default; /* Remove pointer cursor after a move */
+    background-color: var(--color-primary-light); /* Different background when occupied */
+}
+
+.cell:not(:empty):hover {
+     transform: none; /* Disable transform after placement */
+}
+
+/* Custom colors for markers */
+.cell.X {
+    color: #d32f2f; /* Red for X */
+    text-shadow: 0 0 5px rgba(211, 47, 47, 0.4);
+}
+
+.cell.O {
+    color: #388e3c; /* Green for O */
+    text-shadow: 0 0 5px rgba(56, 142, 60, 0.4);
+}
+
+/* --- 6. Scoreboard Styling --- */
+.scoreboard {
+    margin-top: var(--spacing-md);
+    padding: 15px; /* More padding */
+    background-color: var(--color-secondary-blue);
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.scoreboard h3 {
+    font-size: 1.4em;
+    color: var(--color-white);
+    margin-bottom: var(--spacing-sm);
+    font-weight: 600;
+}
+
+.scoreboard p {
+    font-size: 1.1em;
+    color: var(--color-white);
+    display: flex;
+    justify-content: space-between; /* Space names and scores */
+    padding: 3px 0;
+}
+
+.scoreboard p span:last-child {
+    font-weight: bold;
+}
+
+/* --- 7. Responsiveness --- */
+@media (max-width: 450px) {
+    /* Adjust container size on very small phones */
+    .container {
+        padding: 15px;
+        max-width: 95%;
+    }
+
+    h1 {
+        font-size: 2em;
+        margin-bottom: 15px;
+    }
+
+    .game-board {
+        width: 100%;
+        max-width: 250px;
+    }
+
+    .cell {
+        font-size: 2.5em;
+    }
+}
